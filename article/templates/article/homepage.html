@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 
 {%block content%}
-    <h1>Articles</h1>
-    {% for a in articles %}
-        <ul><h2>{{a.author}}:</h2></ul>
-        <ul><h4>{{a.title}}</h4></ul>
-        <ul>{{a.text}}</ul>
-        <b>read:{{a.readers.count}}</b>
-    {% endfor %}
-    <hr><hr>
-    {% for article in  wind.articles.all%}
-        <li>{{article.title}}</li>
-    {% endfor %}
-    {% for article in  wind.user.articles.all%}
-        <li>{{article.readers.count}}</li>
-    {% endfor %}
+<h2>Articles:</h2>
+<hr>
+{% for a in articles %}
+    <h3><a href="/article/{{ a.id }}/">{{ a.title }}</a></i></h3>
+    <i>Author - {{ a.author }}</i>
+    <br>
+    <b>road: {{ a.readers.count }}</b>
+    <br>
+    <b>thumbups: {{ a.likes }}</b>
+    <hr>   
+{% endfor %}  
+
 {% endblock %}
