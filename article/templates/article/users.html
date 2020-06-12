@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% For user in users_all %}
-        <h3>{{user.username}}</h3>
+    {% For users in users_all %}
+        <h3>{{users.username}}</h3>
     {% endfor %}
 {% endblock %}
 <hr>

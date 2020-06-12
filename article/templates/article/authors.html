@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for author in authors %}
+    <ul>{{ author.name }}</ul>
+{% endfor %}
+<button><ul><a href="{% url 'add_author' %}">add_author</a></ul></button>
+{% endblock %}
