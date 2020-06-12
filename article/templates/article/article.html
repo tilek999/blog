@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for a in articles %}
+{% for a in article %}
 <ul><h2>{{a.author}}:</h2></ul>
 <ul><h4>{{a.title}}</h4></ul>
 <ul>{{a.text}}</ul>
 <ul>{{a.likes}}</ul>
 <b>read:{{a.readers.count}}</b>
+<form method="POST">
+    {% csrf_token %}
+    <a href="{% url 'edit_article' article.id %}" class="btn btn-lg btn-warning">Edit</a>
+</form>
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-lg btn-warning" >Delete</button>
+</form>
 {% endfor %}
 {% endblock %}

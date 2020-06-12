@@ -8,15 +8,13 @@ from django.contrib.auth.models import User
 
 def homepage(request):
     articles = Article.objects.all()
-    return render(request, "article/homepage.html",
-     {"articles":articles}
-     )
+    return render(request, "article/homepage.html", {"articles":articles})
 
 def author(request):
     authors = Author.objects.all()
     return render(request, "article/authors.html",{"authors":authors})
 
-def profile(request,pk):
+def profile(request, pk):
     profiles = Author.objects.get(id=pk)
     return render(request, "article/profile.html",{"profiles":profiles})
 
@@ -37,8 +35,8 @@ def article(request ,id):
         article.active = False
         article.save()
         return redirect(homepage)
-    article = article.objects.get(id=id)
-    return render(request, "article/article.html", {"article": article})
+    article = Article.objects.get(id=id)
+    return render(request, "article/article.html", {'article': article})
 
 
 def add_article(request):
@@ -70,7 +68,6 @@ def add_author(request):
         author_form = AuthorForm(request.POST)
         if author_form.is_valid():
             author_form.save()
-            return redirect(homepage)
      #   name = request.POST.get("name")  
       #  user_id = request.POST.get("user")
        # user = user.objects.get(id=user_id)
@@ -78,3 +75,8 @@ def add_author(request):
        # author.save()
         return render(request, "article/add_author.html",{"form":form})
         
+
+def edit_article (request, id):
+    article = Article.objects.get(id=id)
+    form = ArticleForm(instance=article)
+    return render(request,  "article/add_article.html",{"form":form})

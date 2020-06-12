@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for a in authors %}
-<ul><h2>{{a.author}}:</h2></ul>
-<b>publications:{{a.articles.count}}</b>
-{% endfor %}
+<ul><h2>{{profiles.id}}:</h2></ul>
+<b>publications:{{profiles.articles.count}}</b>
+<img src="{{ profiles.photo.url }}">
 {% endblock %}

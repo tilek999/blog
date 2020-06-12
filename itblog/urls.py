@@ -15,15 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from article.views import article, author, comment, homepage, profile, add_author, add_article, users
+from article.views import article, author, comment, homepage, profile, add_author, add_article, users, edit_article
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",homepage, name="homepage"),
     path('profile/<int:pk>/',profile, name="profile"),
-    path('author/',author, name= 'authors'),
+    path('author/', author, name= 'authors'),
     path("users/",users, name="users-list"),
     path("article/<int:id>/", article, name="article"),
+    path("article/edit/<int:id>/", edit_article, name="edit-article"),
     path("article/add/", add_article, name = "add_article"),
     path("author/add/",add_author,name = "add_author"),
-]
+]   
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
