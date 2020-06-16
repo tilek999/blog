@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from article.views import article, author, comment, homepage, profile, add_author, add_article, users, edit_article
+from article.views import article, author, comment, homepage,profile, add_author, add_article, users,edit_article, add_comment, edit_comment,delete_comment
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,8 +26,12 @@ urlpatterns = [
     path('author/', author, name= 'authors'),
     path("users/",users, name="users-list"),
     path("article/<int:id>/", article, name="article"),
+    path("comment/<int:id>/",comment, name="comment" ),
     path("article/edit/<int:id>/", edit_article, name="edit-article"),
     path("article/add/", add_article, name = "add_article"),
     path("author/add/",add_author,name = "add_author"),
+    path("comment/add/",add_comment,name="add_comment"),
+    path("comment/<int:id>/edit/",edit_comment,name="edit_comment"),
+    path("comment/<int:id>/delete/",delete_comment,name="delete_comment")
 ]   
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

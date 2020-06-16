@@ -7,6 +7,7 @@
 <ul>{{a.text}}</ul>
 <ul>{{a.likes}}</ul>
 <b>read:{{a.readers.count}}</b>
+{% endfor %}
 <form method="POST">
     {% csrf_token %}
     <a href="{% url 'edit_article' article.id %}" class="btn btn-lg btn-warning">Edit</a>
@@ -15,5 +16,15 @@
     {% csrf_token %}
     <button class="btn btn-lg btn-warning" >Delete</button>
 </form>
+{% for comment in article.comments.all %}
+<h4>{{comment.text}}</h4>
+{{comment.user.full_name}}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="btn_comment" >ADD</button>
+    
+<a href="{% url 'edit_comment' comment.id %}">редактировать</a>  
+<a href="{% url 'delete_comment' comment.id %}">удалить</a>
 {% endfor %}
 {% endblock %}

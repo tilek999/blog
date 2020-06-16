@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .form import ArticleForm, AuthorForm
+from .form import ArticleForm, AuthorForm, CommentForm
 from .models import Article, Author, Comment
 from django.contrib.auth.models import User
 
@@ -18,11 +18,30 @@ def profile(request, pk):
     profiles = Author.objects.get(id=pk)
     return render(request, "article/profile.html",{"profiles":profiles})
 
-
 def comment(request):
-    comment = Comment.objects.all()
-    return render(request, "article/comment.html",{"comment":comment})
+    comment = comment.objects.get
+    return render(request, "article/article.html",{"comment":comment})
 
+def add_comment(request):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(homepage)
+
+
+def edit_comment(request, id):
+    comment=comment.objects.get(id=id)
+    if request.method == "POST":
+        form=CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()   
+    form = CommentForm(instance=comment)
+    return render(request,"article/comment",{"form":form})
+
+def delete_comment(request, id):
+    comment.objects.get(id=id).delete()
+    return render(request, "article/homepage.html")
 
 def users(request):
     context ={}
@@ -35,6 +54,14 @@ def article(request ,id):
         article.active = False
         article.save()
         return redirect(homepage)
+    elif "comment_btn" in request.POST:
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment=comment(user=user,
+            article=article,
+            text=form.cleaned_data["text"]
+            comment.save())
+            return redirect(homepage)
     article = Article.objects.get(id=id)
     return render(request, "article/article.html", {'article': article})
 
