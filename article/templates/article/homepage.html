@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-{% load bootstrap4 %}
+{% load static %}
 
 {%block content%}
 <h2>Articles:</h2>
 <hr>
 {% for a in articles %}
-    <h3><a href="{% url 'profile' a.author.id %}">{{ a.title }}</a></i></h3>
-    </form>
-    <a href=""><i> Author - {{ a.author }} </i> </a>
+    <h3><a href="">{{ a.title }}</a></i></h3>
+    <i> Author - {{ a.author }} </i>
     <br>
     <b>road: {{ a.readers.count }}</b>
     <br>

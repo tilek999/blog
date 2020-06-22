@@ -1,13 +1,22 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .form import ArticleForm, AuthorForm, CommentForm
-from .models import Article, Author, Comment
+from article.form import ArticleForm, AuthorForm, CommentForm
+from article.models import Article, Author, Comment
 from django.contrib.auth.models import User
 
 
 
 
 def homepage(request):
-    articles = Article.objects.all()
+    
+
+    if request.method == 'POST':
+        key = request.POST.get('key_word')
+        articles = Article.objects.filter(active=True).filter(
+            title__contains=key) | Article.objects.filter(active=True).filter(
+                text__contains = key)| Article.objects.filter(active=True).filter(tag__name__contains = key)
+    else:
+        articles = Article.objects.filter(active=True).order_by("likes")
+
     return render(request, "article/homepage.html", {"articles":articles})
 
 def author(request):
@@ -19,7 +28,7 @@ def profile(request, pk):
     return render(request, "article/profile.html",{"profiles":profiles})
 
 def comment(request):
-    comment = comment.objects.get
+    comment = Comment.objects.get
     return render(request, "article/article.html",{"comment":comment})
 
 def add_comment(request):
@@ -31,16 +40,16 @@ def add_comment(request):
 
 
 def edit_comment(request, id):
-    comment=comment.objects.get(id=id)
+    comment=Comment.objects.get(id=id)
     if request.method == "POST":
-        form=CommentForm(request.POST, instance=comment)
+        form=CommentForm(request.POST, request.FILES, instance=comment)
         if form.is_valid():
             form.save()   
     form = CommentForm(instance=comment)
     return render(request,"article/comment",{"form":form})
 
 def delete_comment(request, id):
-    comment.objects.get(id=id).delete()
+    Comment.objects.get(id=id).delete()
     return render(request, "article/homepage.html")
 
 def users(request):
@@ -49,6 +58,12 @@ def users(request):
     return render(request, "article/user.html",{"users":users})
 
 def article(request ,id):
+    article = Article.objects.get(id=id)
+    article.views +=1
+    user = request.user
+    if not user.is_anonymous:
+        article.readers.add(user)
+    article.save()
     if request.method =="POST":
         article = Article.objects.get(id=id)
         article.active = False
@@ -59,10 +74,9 @@ def article(request ,id):
         if form.is_valid():
             comment=comment(user=user,
             article=article,
-            text=form.cleaned_data["text"]
-            comment.save())
+            text=form.cleaned_data["text"])
+            comment.save()
             return redirect(homepage)
-    article = Article.objects.get(id=id)
     return render(request, "article/article.html", {'article': article})
 
 
@@ -74,14 +88,6 @@ def add_article(request):
             return redirect(homepage)
     form = ArticleForm()
     return render(request, "article/add_article.html",{"form":form})
-       # form = ArticleForm()
-       # article.title=request.POST.get('title')
-      #  article.text=request.POST.get('text')
-       # author_id = request.POST.get('author')
-      #  authors = Article.objects.get(id=author_id)
-       # article.author = authors
-       # article.save()
-    #form = ArticleForm()
    
 
 
@@ -95,15 +101,10 @@ def add_author(request):
         author_form = AuthorForm(request.POST)
         if author_form.is_valid():
             author_form.save()
-     #   name = request.POST.get("name")  
-      #  user_id = request.POST.get("user")
-       # user = user.objects.get(id=user_id)
-       # author = Author(name=name, user=user) 
-       # author.save()
         return render(request, "article/add_author.html",{"form":form})
         
 
 def edit_article (request, id):
     article = Article.objects.get(id=id)
-    form = ArticleForm(instance=article)
+    form = ArticleForm(request.FILES, instance=article)
     return render(request,  "article/add_article.html",{"form":form})

@@ -1,11 +1,11 @@
 from django import forms
-from article.models import Article, Author, Comment
+from article.models import Article, Author, Comment, Tag
 
 
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ["title","text","author"]
+        fields = ["title","text","picture","tags"]
 
 class AuthorForm(forms.ModelForm):
     class Meta:

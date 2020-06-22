@@ -1,0 +1,12 @@
+a {
+    color: darkblue;
+    text-decoration: none;
+}
+a:hover{
+    color: blue;
+    text-decoration: none;
+}
+
+button{
+    color: darkgray;
+}
