@@ -2,19 +2,30 @@ from django.shortcuts import render, HttpResponse, redirect
 from article.form import ArticleForm, AuthorForm, CommentForm
 from article.models import Article, Author, Comment
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 
 
 
 def homepage(request):
-    
-
     if request.method == 'POST':
         key = request.POST.get('key_word')
-        articles = Article.objects.filter(active=True).filter(
-            title__contains=key) | Article.objects.filter(active=True).filter(
-                text__contains = key)| Article.objects.filter(active=True).filter(tag__name__contains = key)
+        article = Article.objects.filter(Q(active=True), Q(title__contains=key) 
+            | Q(text__contains=key) | Q(tag__name__contains=key) 
+                | Q(reader__username__contains=key) | Q(comment__text__contains=key) | Q(picture__name__contains=key))
+        articles = articles.objects.distinct()
     else:
+        print(request.GET)
+        if "key_word" in request.GET:
+            articles = Article.objects.filter(active=True).filter(
+            title__contains=key) | Article.objects.filter(active=True).filter(
+                text__contains = key)| Article.objects.filter(active=True).filter(
+                    tag__name__contains = key) |  Article.objects.filter(active=True).filter(
+                    readers__username__contains = key) |  Article.objects.filter(active=True).filter(
+                    comments__text__contains = key) |   Article.objects.filter(active=True).filter(
+                    picture__name__contains = key )
+            key = request.GET.get("key_word")
+            
         articles = Article.objects.filter(active=True).order_by("likes")
 
     return render(request, "article/homepage.html", {"articles":articles})
@@ -24,7 +35,7 @@ def author(request):
     return render(request, "article/authors.html",{"authors":authors})
 
 def profile(request, pk):
-    profiles = Author.objects.get(id=pk)
+    profiles = Author.objects.get(pk=pk)
     return render(request, "article/profile.html",{"profiles":profiles})
 
 def comment(request):
@@ -55,7 +66,7 @@ def delete_comment(request, id):
 def users(request):
     context ={}
     context["users_all"] = User.objects.all()
-    return render(request, "article/user.html",{"users":users})
+    return render(request, "article/users_list.html",{"users":users})
 
 def article(request ,id):
     article = Article.objects.get(id=id)
@@ -84,8 +95,24 @@ def add_article(request):
     if request.method == "POST":
         form = ArticleForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect(homepage)
+            article = Article()
+            if not Author.objects.filter(user=request.user):
+                author = Author(user=user, name = request.user.usernname)
+                author.save()
+            else:
+                author = Author.objects.get(user=request.user)
+            article = Article()
+            article.author = author
+            article.title = form.cleaned_data["title"]
+            article.text = form.cleaned_data["text"]
+            article.picture = form.cleaned_data["picture"]
+            tags = form.cleaned_data["tags"]
+            article.save()
+            for tag in tags.split(","):
+                obj, created = Tag.objects.get_or_create(name=tag)
+                article.tag.add(obj)
+            article.save()
+            return redirect("add_article")
     form = ArticleForm()
     return render(request, "article/add_article.html",{"form":form})
    

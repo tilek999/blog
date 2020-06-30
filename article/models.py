@@ -36,7 +36,7 @@ class Article(models.Model):
     dislikes = models.IntegerField(default=0) 
     views = models.IntegerField(default=0)
     reposts = models.IntegerField(default=0)
-    tags = models.ManyToManyField("Tag", blank = True, related_name="article")
+    tag = models.ManyToManyField("Tag", blank = True, related_name="article")
     publication_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
     readers = models.ManyToManyField(to=User, related_name="articles",blank=True)

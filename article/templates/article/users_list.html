@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% For users in users_all %}
+    {% for users in users_all %}
         <h3>{{users.username}}</h3>
     {% endfor %}
 {% endblock %}

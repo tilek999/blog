@@ -5,8 +5,8 @@
 <h2>Articles:</h2>
 <hr>
 {% for a in articles %}
-    <h3><a href="">{{ a.title }}</a></i></h3>
-    <i> Author - {{ a.author }} </i>
+    <h3><a href="{% url 'article' a.id %}">{{ a.title }}</a></i></h3>
+    <a href="{% url 'profile' a.author.pk %}"><i> Author - {{ a.author }} </i></a>
     <br>
     <b>road: {{ a.readers.count }}</b>
     <br>

@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +25,6 @@
               <ul class="dropdown-menu">
                 <li><a href="{% url 'add_article' %}">Add article</a></li>
                 <li><a href="{% url 'add_author' %}">Add author</a></li>
-                <li><a href="{% url 'add_comment' %}">Add comment</a></li>
               </ul>
             </li>
             <li><a href="{% url 'authors' %}">authors</a></li>
@@ -33,7 +33,7 @@
           </ul>
           <form class="form-online" action="{% url 'homepage' %}">
             {% csrf_token %}
-            <input form="form-control mr-sm-2" type="text" name="key_word" placeholder="SEARCH" >
+            <input class="form-control mr-sm-2" type="text" name="key_word" placeholder="SEARCH" >
             <button class="btn btn-primary">Поиск</button>
           </form>
         </div>

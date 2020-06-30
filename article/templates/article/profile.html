@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<ul><h2>{{profiles.id}}:</h2></ul>
-<b>publications:{{profiles.articles.count}}</b>
-{% if profiles.photo %}
-    <img src="{{ profiles.photo.url }}" width="80%" >
-{% endif %}    
+{% include 'include/message.html' %}
+{% for p in profiles %}
+    <ul><h2>{{p.id}}:</h2></ul>
+    <b>publications:{{p.articles.count}}</b>
+    {% if p.photo %}
+    <img src="{{ p.photo.url }}" width="80%" >
+    {% endif %}    
+{% endfor %}
 {% endblock %}

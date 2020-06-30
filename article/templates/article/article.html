@@ -4,12 +4,12 @@
 {% for a in article %}
 <ul><h2>{{a.author}}:</h2></ul>
 <ul><h4>{{a.title}}</h4></ul>
-<ul>{{a.text}}</ul>
+<ul>{{a.text|escape|linebreaks}}</ul>
 <ul>{{a.likes}}</ul>
 <ul>{{a.dislikes}}</ul>
 <ul>{{a.views}}</ul>
 <b>read:{{a.readers.count}}</b>
-<ul>{{a.piblication_date}}</ul>
+<ul>{{a.piblication_date|date:"d.m.Y H:i"}}</ul>
 <ul>{{a.update_date}}</ul>
 {% endfor %}
 <form method="POST">
