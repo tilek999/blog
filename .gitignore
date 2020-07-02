@@ -1,4 +1,4 @@
-media/*
+media
 send_sms/.env
 .vscode/
 .idea
