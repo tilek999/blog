@@ -9,7 +9,7 @@ from django.db.models import Q
 
 def homepage(request):
     if request.method == 'POST':
-        key = request.POST.get('key_word')
+        key = request.GET.get('key_word')
         article = Article.objects.filter(Q(active=True), Q(title__contains=key) 
             | Q(text__contains=key) | Q(tag__name__contains=key) 
                 | Q(reader__username__contains=key) | Q(comment__text__contains=key) | Q(picture__name__contains=key))
@@ -83,7 +83,7 @@ def article(request ,id):
     elif "comment_btn" in request.POST:
         form = CommentForm(request.POST)
         if form.is_valid():
-            comment=comment(user=user,
+            comment=comment(users=user,
             article=article,
             text=form.cleaned_data["text"])
             comment.save()
@@ -97,7 +97,7 @@ def add_article(request):
         if form.is_valid():
             article = Article()
             if not Author.objects.filter(user=request.user):
-                author = Author(user=user, name = request.user.usernname)
+                author = Author(user=users, name = request.user.usernname)
                 author.save()
             else:
                 author = Author.objects.get(user=request.user)
@@ -109,7 +109,7 @@ def add_article(request):
             tags = form.cleaned_data["tags"]
             article.save()
             for tag in tags.split(","):
-                obj, created = Tag.objects.get_or_create(name=tag)
+                obj, created = tag.objects.get_or_create(name=tag)
                 article.tag.add(obj)
             article.save()
             return redirect("add_article")

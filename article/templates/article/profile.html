@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include 'include/message.html' %}
+
 {% for p in profiles %}
     <ul><h2>{{p.id}}:</h2></ul>
     <b>publications:{{p.articles.count}}</b>

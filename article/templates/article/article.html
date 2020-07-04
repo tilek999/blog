@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% for a in article %}
+{% for a in articles %}
 <ul><h2>{{a.author}}:</h2></ul>
 <ul><h4>{{a.title}}</h4></ul>
 <ul>{{a.text|escape|linebreaks}}</ul>
